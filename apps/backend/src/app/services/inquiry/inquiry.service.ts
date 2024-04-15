@@ -1,9 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Inquiry } from '../../entities/inquiry';
 import { SaveInquiryRequest } from '../../controllers/@models/requests/save-inquiry-requests';
-import { log } from 'console';
 import { EditInquryRequest } from '../../controllers/@models/requests/edit-inquiry-request';
 
 @Injectable()
@@ -32,6 +31,13 @@ export class InquiryService {
     if (inquiryToEdit) {
       inquiryToEdit.Name = request.name;
       this.inquiryRepository.save(inquiryToEdit);
+    }
+  }
+
+  public async deleteInquiryRequest(id:number) {
+    const inquiryToEdit: Inquiry | null = await this.getById(id);
+    if(inquiryToEdit){
+      this.inquiryRepository.delete(inquiryToEdit);
     }
   }
 }
