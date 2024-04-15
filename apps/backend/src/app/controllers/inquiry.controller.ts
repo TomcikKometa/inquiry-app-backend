@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 
 import { InquiryService } from '../services/inquiry/inquiry.service';
 import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
@@ -30,5 +30,10 @@ export class InquiryController {
   @Patch('/edit/:id')
   public editInquiry(@Param('id')id:number,@Req() request: Request<EditInquryRequest>){
     this.inquiryService.editInquiry(id,request.body)
+  }
+
+  @Delete('/delete/:id')
+  public deleteInquiry(@Param('id')id:number){
+    this.inquiryService.deleteInquiryRequest(id);
   }
 }
