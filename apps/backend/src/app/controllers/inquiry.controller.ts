@@ -2,10 +2,11 @@ import { Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common
 
 import { InquiryService } from '../services/inquiry/inquiry.service';
 import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
-import { Inquiry } from '../entities/inquiry';
-import { SaveInquiryRequest } from './@models/requests/save-inquiry-requests';
+import { CreateInquiryRequest } from './@models/requests/create-inquiry-requests';
 import { Request } from 'express';
 import { EditInquryRequest } from './@models/requests/edit-inquiry-request';
+import { InquiryDto } from '../services/inquiry/model/inquiry-dto';
+import { GetOneInquiryResponse } from './@models/responses/get-one-inqiry-response';
 
 @Controller('/inquiry')
 export class InquiryController {
@@ -13,18 +14,20 @@ export class InquiryController {
 
   @Get('/all')
   public async getAll(): Promise<GetAllInquiryResponse> {
-    const inquiryList: Inquiry[] = await this.inquiryService.getAll();
+    const inquiryList: InquiryDto[] = await this.inquiryService.getAll();
     return { inquiryList };
   }
 
   @Post('/save')
-  public saveInquiry(@Req() request: Request<SaveInquiryRequest>) {
+  public saveInquiry(@Req() request: Request<CreateInquiryRequest>) {
     this.inquiryService.saveInquiry(request.body);
   }
 
   @Get(':id')
-  public async getById(@Param('id') id: number): Promise<Inquiry> {
-    return this.inquiryService.getById(id);
+  public async getById(@Param('id') id: number): Promise<GetOneInquiryResponse> {
+    return {
+      inquiry: await this.inquiryService.getById(id)
+    }
   }
 
   @Patch('/edit/:id')
@@ -33,7 +36,7 @@ export class InquiryController {
   }
 
   @Delete('/delete/:id')
-  public deleteInquiry(@Param('id')id:number){
-    this.inquiryService.deleteInquiryRequest(id);
+   public async deleteInquiry(@Param('id')id: number): Promise<void>{
+     await this.inquiryService.deleteInquiryRequest(id);
   }
 }

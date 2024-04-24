@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Inquiry } from '../../entities/inquiry';
-import { SaveInquiryRequest } from '../../controllers/@models/requests/save-inquiry-requests';
+import { CreateInquiryRequest } from '../../controllers/@models/requests/create-inquiry-requests';
 import { EditInquryRequest } from '../../controllers/@models/requests/edit-inquiry-request';
+import { InquiryDto } from './model/inquiry-dto';
 
 @Injectable()
 export class InquiryService {
@@ -12,32 +13,37 @@ export class InquiryService {
     private inquiryRepository: Repository<Inquiry>
   ) {}
 
-  public getAll(): Promise<Inquiry[]> {
-    return this.inquiryRepository.find();
+  public async getAll(): Promise<InquiryDto[]> {
+    return (await this.inquiryRepository.find()).map((entity:Inquiry) => (this.entityToDto(entity)));
   }
 
-  public getById(id: number): Promise<Inquiry | null> {
-    return this.inquiryRepository.findOneBy({ ID: id });
+  public async getById(id: number): Promise<InquiryDto | null> {
+    const entityInquiry:Inquiry = await this.inquiryRepository.findOneBy({ ID: id });
+    return this.entityToDto(entityInquiry);
   }
 
-  public saveInquiry(request: SaveInquiryRequest): void {
+  public saveInquiry(request: CreateInquiryRequest): void {
     const inquiry = new Inquiry();
     inquiry.Name = request.name;
     this.inquiryRepository.save(inquiry);
   }
 
   public async editInquiry(id: number, request: EditInquryRequest) {
-    const inquiryToEdit: Inquiry | null = await this.getById(id);
+    const inquiryToEdit: Inquiry | null = await this.inquiryRepository.findOneBy({ID:id})
     if (inquiryToEdit) {
       inquiryToEdit.Name = request.name;
       this.inquiryRepository.save(inquiryToEdit);
     }
   }
 
-  public async deleteInquiryRequest(id:number) {
-    const inquiryToEdit: Inquiry | null = await this.getById(id);
-    if(inquiryToEdit){
-      this.inquiryRepository.delete(inquiryToEdit);
-    }
+  public async deleteInquiryRequest(id:number): Promise<void>{
+    await this.inquiryRepository.findOneBy({ID:id}).then(async (value:Inquiry) => { await this.inquiryRepository.delete(value)})
+  }
+
+  private entityToDto(entity:Inquiry): InquiryDto {
+    return {
+      id : entity.ID,
+      name : entity.Name
+    };
   }
 }
