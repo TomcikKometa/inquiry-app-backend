@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 
 import { InquiryService } from '../services/inquiry/inquiry.service';
 import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
@@ -19,8 +19,8 @@ export class InquiryController {
   }
 
   @Post('/save')
-  public saveInquiry(@Req() request: Request<CreateInquiryRequest>) {
-    this.inquiryService.saveInquiry(request.body);
+  public async saveInquiry(@Body() body: CreateInquiryRequest) {
+    await this.inquiryService.saveInquiry(body);
   }
 
   @Get(':id')
