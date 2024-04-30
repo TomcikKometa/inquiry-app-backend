@@ -5,13 +5,17 @@ import { Inquiry } from '../../entities/inquiry';
 import { CreateInquiryRequest } from '../../controllers/@models/requests/create-inquiry-requests';
 import { EditInquryRequest } from '../../controllers/@models/requests/edit-inquiry-request';
 import { InquiryDto } from './model/inquiry-dto';
+import { Question } from '../../entities/question';
+import { QuestionDto } from './model/question-dto';
+import { QuestionType } from '../../entities/enums/question-type';
 
 @Injectable()
 export class InquiryService {
   constructor(
     @InjectRepository(Inquiry)
-    private inquiryRepository: Repository<Inquiry>
-  ) {}
+    private inquiryRepository: Repository<Inquiry>,
+    @InjectRepository(Question)
+    private questionRepository: Repository<Question>) {}
 
   public async getAll(): Promise<InquiryDto[]> {
     return (await this.inquiryRepository.find()).map((entity:Inquiry) => (this.entityToDto(entity)));
@@ -22,10 +26,13 @@ export class InquiryService {
     return this.entityToDto(entityInquiry);
   }
 
-  public saveInquiry(request: CreateInquiryRequest): void {
+  public async saveInquiry(request: CreateInquiryRequest): Promise<void> {
     const inquiry = new Inquiry();
     inquiry.Name = request.name;
-    this.inquiryRepository.save(inquiry);
+    await this.inquiryRepository.save(inquiry);
+
+    await this.questionRepository.save(request.questions.map((question:QuestionDto)=> new Question(question.type,question.label,inquiry)));
+    
   }
 
   public async editInquiry(id: number, request: EditInquryRequest) {
@@ -43,7 +50,13 @@ export class InquiryService {
   private entityToDto(entity:Inquiry): InquiryDto {
     return {
       id : entity.ID,
-      name : entity.Name
+      name : entity.Name,
+      questions:entity.questions?.map((question:Question) => {
+        return {
+          label : question.label,
+          type : question.questionType as QuestionType
+        }
+      })
     };
   }
 }
