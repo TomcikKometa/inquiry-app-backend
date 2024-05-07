@@ -1,10 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-Entity()
+@Entity()
 export class ShortTextQuestion {
     @PrimaryGeneratedColumn()
     id: number;
     
     @Column()
     answer:string;
+
+    constructor(answer:string){this.answer = answer}
 }

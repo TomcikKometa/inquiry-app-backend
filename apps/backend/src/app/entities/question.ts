@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { QuestionType } from "./enums/question-type";
 import { Inquiry } from "./inquiry";
+import { ShortTextQuestion } from "./short-text-question";
 
 @Entity()
 export class Question {
@@ -13,12 +14,16 @@ export class Question {
     @Column()
     label:string;
 
+    @OneToOne(()=>ShortTextQuestion)
+    @JoinColumn()
+    shortTextQuestion:ShortTextQuestion;
+
     @ManyToOne(()=>Inquiry,inquiry=>inquiry.questions)
-    inquiry:Inquiry
+    inquiry:Inquiry;
 
     constructor(questionType:QuestionType,label:string,inquiry:Inquiry){
         this.questionType = questionType;
         this.label = label;
-        this.inquiry  = inquiry
+        this.inquiry  = inquiry;
     }
 }

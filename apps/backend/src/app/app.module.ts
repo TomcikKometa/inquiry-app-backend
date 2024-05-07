@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Inquiry } from './entities/inquiry';
 import { InquiryModule } from './inquiry-module/inquiry.module';
 
 @Module({
@@ -12,7 +11,7 @@ import { InquiryModule } from './inquiry-module/inquiry.module';
       port: 3306,
       username: 'root',
       password: 'root',
-      entities: [Inquiry],
+      autoLoadEntities:true,
       synchronize: true,
       database: 'db_inquiry',
     }),
