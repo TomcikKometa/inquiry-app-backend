@@ -5,6 +5,14 @@ import { Inquiry } from '../../entities/inquiry';
 import { CreateInquiryRequest } from '../../controllers/@models/requests/create-inquiry-requests';
 import { EditInquryRequest } from '../../controllers/@models/requests/edit-inquiry-request';
 import { InquiryDto } from './model/inquiry-dto';
+<<<<<<< Updated upstream
+=======
+import { QuestionDto } from './model/question-dto';
+import { QuestionType } from '../../entities/enums/question-type';
+import { ShortTextQuestion } from '../../entities/short-text-question';
+import { ShortTextQuestionDto } from './model/shortTextQuestionDto';
+import { Question } from '../../entities/question';
+>>>>>>> Stashed changes
 
 @Injectable()
 export class InquiryService {
