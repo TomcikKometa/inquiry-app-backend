@@ -18,7 +18,7 @@ export class Question {
     @JoinColumn()
     shortTextQuestion:ShortTextQuestion;
 
-    @ManyToOne(()=>Inquiry,inquiry=>inquiry.questions)
+    @ManyToOne(()=>Inquiry,inquiry=>inquiry.questions,{onDelete:"CASCADE"})
     inquiry:Inquiry;
 
     constructor(questionType:QuestionType,label:string,inquiry:Inquiry){
