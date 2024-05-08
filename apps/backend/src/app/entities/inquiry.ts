@@ -9,6 +9,6 @@ export class Inquiry {
   @Column()
   Name:string
 
-  @OneToMany(()=> Question, question =>question.inquiry)
+  @OneToMany(()=> Question, question =>question.inquiry,{onDelete:'CASCADE'})
   questions:Question[]
 }
