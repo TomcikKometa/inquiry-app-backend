@@ -1,6 +1,6 @@
 import { QuestionType } from "../../../entities/enums/question-type";
 
-export interface QuestionDto {
+export class QuestionDto {
     label: string;
     type: QuestionType;
 }
