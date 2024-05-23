@@ -8,5 +8,4 @@ export class ShortTextQuestion {
     @Column()
     answer:string;
 
-    constructor(answer:string){this.answer = answer}
 }
