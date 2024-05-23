@@ -18,6 +18,9 @@ import { SingleSelectAnswer } from '../../entities/single-select-answer';
 import { SingleSelectQuestion } from '../../entities/single-select-question';
 import { SingleSelectQuestionDto } from './model/single-select-question-dto';
 import { SingleSelectAnswerDto } from './model/single-select-answer-dto';
+import { ScaleQuestionDto } from './model/scale-question-dto';
+import { ScaleQuestionService } from '../scale-question/scale-question.service';
+import { ShortTextQuestionService } from '../short-text-question/short-text-question.service';
 
 @Injectable()
 export class InquiryService {
@@ -33,13 +36,17 @@ export class InquiryService {
     @InjectRepository(MultiSelectAnswer)
     private mulsiSelectAnswerRepository: Repository<MultiSelectAnswer>,
     @InjectRepository(SingleSelectQuestion)
-    private singleSelectQuestionRepository:Repository<SingleSelectQuestion>,
+    private singleSelectQuestionRepository: Repository<SingleSelectQuestion>,
     @InjectRepository(SingleSelectAnswer)
-    private singleSelectAnswerRepository:Repository<SingleSelectAnswer>
+    private singleSelectAnswerRepository: Repository<SingleSelectAnswer>,
+    private readonly scaleQuestionService:ScaleQuestionService,
+    private readonly shortTextQuestionService:ShortTextQuestionService
   ) {}
 
   public async getAll(): Promise<InquiryDto[]> {
-    return (await this.inquiryRepository.find()).map((entity: Inquiry) => this.entityToDto(entity));
+    return (await this.inquiryRepository.find()).map((entity: Inquiry) =>
+      this.entityToDto(entity)
+    );
   }
 
   public async getById(id: number): Promise<InquiryDto | null> {
@@ -53,41 +60,59 @@ export class InquiryService {
     const inquiry = new Inquiry();
     inquiry.Name = request.name;
     await this.inquiryRepository.save(inquiry);
-    const questions = request.questions.map(async (questionDto: QuestionDto) => {
-      const question: Question = new Question(questionDto.type, questionDto.label, inquiry);
-      if (questionDto.type === QuestionType.SHORT_TEXT) {
-        const shortTextQuestion: ShortTextQuestion = await this.shortTextQuestionRepository.save(
-          new ShortTextQuestion((questionDto as ShortTextQuestionDto).answer)
+    const questions = request.questions.map(
+      async (questionDto: QuestionDto) => {
+        const question: Question = new Question(
+          questionDto.type,
+          questionDto.label,
+          inquiry
         );
-        question.shortTextQuestion = shortTextQuestion;
-      }
+        if (questionDto.type === QuestionType.SHORT_TEXT) {
+          question.shortTextQuestion = await this.shortTextQuestionService.save(questionDto as ShortTextQuestionDto);
+        }
 
-      if (questionDto.type === QuestionType.MULTISELECT) {
-        const multiSelectAnswers: MultiSelectAnswer[] = await this.mulsiSelectAnswerRepository.save(
-          (questionDto as MultiSelectQuestionDto).answers.map((answerDto: MultiSelectAnswerDto) => new MultiSelectAnswer(answerDto.answer))
-        );
-        const multiSelectQuestion: MultiSelectQuestion = await this.multiSelectQuestionRepository.save(
-          new MultiSelectQuestion(multiSelectAnswers)
-        );
-        question.multiSelectQuestion = multiSelectQuestion;
-      }
+        if (questionDto.type === QuestionType.MULTISELECT) {
+          const multiSelectAnswers: MultiSelectAnswer[] =
+            await this.mulsiSelectAnswerRepository.save(
+              (questionDto as MultiSelectQuestionDto).answers.map(
+                (answerDto: MultiSelectAnswerDto) =>
+                  new MultiSelectAnswer(answerDto.answer)
+              )
+            );
+          const multiSelectQuestion: MultiSelectQuestion =
+            await this.multiSelectQuestionRepository.save(
+              new MultiSelectQuestion(multiSelectAnswers)
+            );
+          question.multiSelectQuestion = multiSelectQuestion;
+        }
 
-      if (questionDto.type === QuestionType.SINGLE_SELECT) {
-        const singleSelectAnswers:SingleSelectAnswer[] = await this.singleSelectAnswerRepository.save(
-          (questionDto as SingleSelectQuestionDto).answers.map((amswerDto:SingleSelectAnswerDto)=> new SingleSelectAnswer(amswerDto.answer))
-        );
-        const singleSelectQuestion:SingleSelectQuestion = await this.singleSelectQuestionRepository.save(
-          (new SingleSelectQuestion(singleSelectAnswers))
-        );
-        question.singleSelectQuestion = singleSelectQuestion
+        if (questionDto.type === QuestionType.SINGLE_SELECT) {
+          const singleSelectAnswers: SingleSelectAnswer[] =
+            await this.singleSelectAnswerRepository.save(
+              (questionDto as SingleSelectQuestionDto).answers.map(
+                (amswerDto: SingleSelectAnswerDto) =>
+                  new SingleSelectAnswer(amswerDto.answer)
+              )
+            );
+          const singleSelectQuestion: SingleSelectQuestion =
+            await this.singleSelectQuestionRepository.save(
+              new SingleSelectQuestion(singleSelectAnswers)
+            );
+          question.singleSelectQuestion = singleSelectQuestion;
+        }
+
+        if (questionDto.type === QuestionType.SCALE) {
+            question.scaleQuestion = await this.scaleQuestionService.save(questionDto as ScaleQuestionDto);
+        }
+        return question;
       }
-      return question;
-    });
+    );
     await this.questionRepository.save(await Promise.all(questions));
   }
 
   public async editInquiry(id: number, request: EditInquryRequest) {
-    const inquiryToEdit: Inquiry | null = await this.inquiryRepository.findOneBy({ ID: id });
+    const inquiryToEdit: Inquiry | null =
+      await this.inquiryRepository.findOneBy({ ID: id });
     if (inquiryToEdit) {
       inquiryToEdit.Name = request.name;
       this.inquiryRepository.save(inquiryToEdit);
@@ -95,9 +120,11 @@ export class InquiryService {
   }
 
   public async deleteInquiryRequest(id: number): Promise<void> {
-    await this.inquiryRepository.findOneBy({ ID: id }).then(async (value: Inquiry) => {
-      await this.inquiryRepository.delete(value);
-    });
+    await this.inquiryRepository
+      .findOneBy({ ID: id })
+      .then(async (value: Inquiry) => {
+        await this.inquiryRepository.delete(value);
+      });
   }
 
   private entityToDto(entity: Inquiry): InquiryDto {
