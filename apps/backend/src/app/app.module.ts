@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InquiryModule } from './inquiry-module/inquiry.module';
+import { MultiSelectAnswerService } from './services/multi-select-answer/multi-select-answer.service';
 
 @Module({
   imports: [
@@ -17,5 +18,6 @@ import { InquiryModule } from './inquiry-module/inquiry.module';
     }),
     InquiryModule,
   ],
+  providers: [],
 })
 export class AppModule {}
