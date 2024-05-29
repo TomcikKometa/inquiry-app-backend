@@ -8,12 +8,7 @@ export class SingleSelectQuestion{
     id:number;
 
     @OneToMany(()=>SingleSelectAnswer,singleSelectAnswer=>singleSelectAnswer.question)
-    public answers:SingleSelectAnswer[]
-
-    constructor(answers:SingleSelectAnswer[]){
-        this.answers = answers
-    }
-
+    public answers:SingleSelectAnswer[];
 }
 
 

@@ -12,8 +12,4 @@ export class MultiSelectAnswer {
   @ManyToOne(
     () => MultiSelectQuestion,(multiSelectQuestion) => multiSelectQuestion.answers)
   public multiSelectQuestion: MultiSelectQuestion;
-
-  public constructor(answer: string) {
-    this.answer = answer;
-  }
 }
