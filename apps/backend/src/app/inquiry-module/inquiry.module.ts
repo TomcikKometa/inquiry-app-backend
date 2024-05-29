@@ -12,6 +12,10 @@ import { SingleSelectAnswer } from '../entities/single-select-answer';
 import { ScaleQuestion } from '../entities/scale-question';
 import { ScaleQuestionService } from '../services/scale-question/scale-question.service';
 import { ShortTextQuestionService } from '../services/short-text-question/short-text-question.service';
+import { SingleSelectAnswerService } from '../services/single-select-answer.service.ts/single-select-answer.service';
+import { SingleSelectQuestionService } from '../services/single-select-question/single-select-question.service';
+import { MultiSelectQuestionService } from '../services/multi-select-question/multi-select-question.service';
+import { MultiSelectAnswerService } from '../services/multi-select-answer/multi-select-answer.service';
 
 @Module({
   imports: [
@@ -26,7 +30,15 @@ import { ShortTextQuestionService } from '../services/short-text-question/short-
       ScaleQuestion,
     ]),
   ],
-  providers: [InquiryService,ScaleQuestionService,ShortTextQuestionService],
+  providers: [
+    InquiryService,
+    ScaleQuestionService,
+    ShortTextQuestionService,
+    SingleSelectAnswerService,
+    SingleSelectQuestionService,
+    MultiSelectQuestionService,
+    MultiSelectAnswerService
+  ],
   controllers: [InquiryController],
 })
 export class InquiryModule {}
