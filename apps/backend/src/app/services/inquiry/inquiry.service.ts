@@ -17,10 +17,13 @@ import { MultiSelectAnswerDto } from './model/mulsti-select-answer-dto';
 import { SingleSelectAnswer } from '../../entities/single-select-answer';
 import { SingleSelectQuestion } from '../../entities/single-select-question';
 import { SingleSelectQuestionDto } from './model/single-select-question-dto';
-import { SingleSelectAnswerDto } from './model/single-select-answer-dto';
 import { ScaleQuestionDto } from './model/scale-question-dto';
 import { ScaleQuestionService } from '../scale-question/scale-question.service';
 import { ShortTextQuestionService } from '../short-text-question/short-text-question.service';
+import { SingleSelectAnswerService } from '../single-select-answer.service.ts/single-select-answer.service';
+import { SingleSelectQuestionService } from '../single-select-question/single-select-question.service';
+import { MultiSelectQuestionService } from '../multi-select-question/multi-select-question.service';
+import { MultiSelectAnswerService } from '../multi-select-answer/multi-select-answer.service';
 
 @Injectable()
 export class InquiryService {
@@ -39,8 +42,12 @@ export class InquiryService {
     private singleSelectQuestionRepository: Repository<SingleSelectQuestion>,
     @InjectRepository(SingleSelectAnswer)
     private singleSelectAnswerRepository: Repository<SingleSelectAnswer>,
-    private readonly scaleQuestionService:ScaleQuestionService,
-    private readonly shortTextQuestionService:ShortTextQuestionService
+    private readonly scaleQuestionService: ScaleQuestionService,
+    private readonly shortTextQuestionService: ShortTextQuestionService,
+    private readonly singleSelectAnswerService: SingleSelectAnswerService,
+    private readonly singleSelectQuestionService: SingleSelectQuestionService,
+    private readonly multiSelectQuestionService: MultiSelectQuestionService,
+    private readonly multiSelectAnswerService: MultiSelectAnswerService
   ) {}
 
   public async getAll(): Promise<InquiryDto[]> {
@@ -67,42 +74,34 @@ export class InquiryService {
           questionDto.label,
           inquiry
         );
-        if (questionDto.type === QuestionType.SHORT_TEXT) {
-          question.shortTextQuestion = await this.shortTextQuestionService.save(questionDto as ShortTextQuestionDto);
-        }
-
-        if (questionDto.type === QuestionType.MULTISELECT) {
-          const multiSelectAnswers: MultiSelectAnswer[] =
-            await this.mulsiSelectAnswerRepository.save(
-              (questionDto as MultiSelectQuestionDto).answers.map(
-                (answerDto: MultiSelectAnswerDto) =>
-                  new MultiSelectAnswer(answerDto.answer)
-              )
+        switch (questionDto.type) {
+          case QuestionType.SHORT_TEXT:
+            question.shortTextQuestion =
+              await this.shortTextQuestionService.save(
+                questionDto as ShortTextQuestionDto
+              );
+            break;
+          case QuestionType.MULTISELECT:
+            question.multiSelectQuestion =
+              await this.multiSelectQuestionService.saveWithAnswers(
+                await this.multiSelectAnswerService.saveList(
+                  (questionDto as MultiSelectQuestionDto).answers
+                )
+              );
+            break;
+          case QuestionType.SINGLE_SELECT:
+            question.singleSelectQuestion =
+              await this.singleSelectQuestionService.saveWithAnswers(
+                await this.singleSelectAnswerService.save(
+                  questionDto as SingleSelectQuestionDto
+                )
+              );
+            break;
+          case QuestionType.SCALE:
+            question.scaleQuestion = await this.scaleQuestionService.save(
+              questionDto as ScaleQuestionDto
             );
-          const multiSelectQuestion: MultiSelectQuestion =
-            await this.multiSelectQuestionRepository.save(
-              new MultiSelectQuestion(multiSelectAnswers)
-            );
-          question.multiSelectQuestion = multiSelectQuestion;
-        }
-
-        if (questionDto.type === QuestionType.SINGLE_SELECT) {
-          const singleSelectAnswers: SingleSelectAnswer[] =
-            await this.singleSelectAnswerRepository.save(
-              (questionDto as SingleSelectQuestionDto).answers.map(
-                (amswerDto: SingleSelectAnswerDto) =>
-                  new SingleSelectAnswer(amswerDto.answer)
-              )
-            );
-          const singleSelectQuestion: SingleSelectQuestion =
-            await this.singleSelectQuestionRepository.save(
-              new SingleSelectQuestion(singleSelectAnswers)
-            );
-          question.singleSelectQuestion = singleSelectQuestion;
-        }
-
-        if (questionDto.type === QuestionType.SCALE) {
-            question.scaleQuestion = await this.scaleQuestionService.save(questionDto as ScaleQuestionDto);
+            break;
         }
         return question;
       }
