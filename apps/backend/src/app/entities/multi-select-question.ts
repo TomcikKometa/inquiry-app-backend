@@ -7,8 +7,4 @@ export class MultiSelectQuestion {
   public id: number;
   @OneToMany(() => MultiSelectAnswer, (answers) => answers.multiSelectQuestion)
   public answers: MultiSelectAnswer[];
-
-  public constructor(answers: MultiSelectAnswer[]) {
-    this.answers = answers;
-  }
 }
