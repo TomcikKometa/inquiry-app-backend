@@ -16,6 +16,7 @@ import { SingleSelectAnswerService } from '../services/single-select-answer.serv
 import { SingleSelectQuestionService } from '../services/single-select-question/single-select-question.service';
 import { MultiSelectQuestionService } from '../services/multi-select-question/multi-select-question.service';
 import { MultiSelectAnswerService } from '../services/multi-select-answer/multi-select-answer.service';
+import { QuestionService } from '../services/question/question.service';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { MultiSelectAnswerService } from '../services/multi-select-answer/multi-
     SingleSelectAnswerService,
     SingleSelectQuestionService,
     MultiSelectQuestionService,
-    MultiSelectAnswerService
+    MultiSelectAnswerService,
+    QuestionService
   ],
   controllers: [InquiryController],
 })
