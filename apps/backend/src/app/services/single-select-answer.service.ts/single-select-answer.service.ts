@@ -8,7 +8,7 @@ import { SingleSelectAnswer } from '../../entities/single-select-answer';
 @Injectable()
 export class SingleSelectAnswerService {
   constructor(
-    @InjectRepository(() => SingleSelectAnswer)
+    @InjectRepository(SingleSelectAnswer)
     private readonly singleSelectAnswerRepository: Repository<SingleSelectAnswer>
   ) {}
 

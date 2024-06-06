@@ -7,7 +7,7 @@ import { MultiSelectAnswerDto } from '../inquiry/model/mulsti-select-answer-dto'
 @Injectable()
 export class MultiSelectAnswerService {
   constructor(
-    @InjectRepository(() => MultiSelectAnswer)
+    @InjectRepository(MultiSelectAnswer)
     private readonly multiSelectAnswerRepository: Repository<MultiSelectAnswer>
   ) {}
 

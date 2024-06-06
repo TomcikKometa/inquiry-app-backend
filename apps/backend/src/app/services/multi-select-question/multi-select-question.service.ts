@@ -7,7 +7,7 @@ import { MultiSelectAnswer } from '../../entities/multi-select-answer';
 @Injectable()
 export class MultiSelectQuestionService {
   constructor(
-    @InjectRepository(() => MultiSelectQuestion)
+    @InjectRepository(MultiSelectQuestion)
     private readonly multiSelectQuestionRepository: Repository<MultiSelectQuestion>
   ) {}
 
