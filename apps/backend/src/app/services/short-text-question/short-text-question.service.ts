@@ -7,7 +7,7 @@ import { ShortTextQuestionDto } from '../inquiry/model/shortTextQuestionDto';
 @Injectable()
 export class ShortTextQuestionService {
   constructor(
-    @InjectRepository(() => ShortTextQuestion)
+    @InjectRepository(ShortTextQuestion)
     private readonly shortTextQuestionRepository: Repository<ShortTextQuestion>
   ) {}
 
