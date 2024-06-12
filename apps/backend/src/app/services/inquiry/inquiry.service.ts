@@ -45,7 +45,7 @@ export class InquiryService {
 
   public async deleteInquiryRequest(id: number): Promise<void> {
     await this.inquiryRepository.findOneBy({ ID: id }).then(async (value: Inquiry) => {
-      await this.inquiryRepository.delete(value);
+      await this.inquiryRepository.remove(value);
     });
   }
 
