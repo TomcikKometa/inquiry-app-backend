@@ -16,19 +16,19 @@ export class Question {
     @Column()
     label:string;
 
-    @OneToOne(()=>ShortTextQuestion)
+    @OneToOne(()=>ShortTextQuestion,{eager:true})
     @JoinColumn()
     shortTextQuestion:ShortTextQuestion;
 
-    @OneToOne(()=>MultiSelectQuestion)
+    @OneToOne(()=>MultiSelectQuestion,{eager:true})
     @JoinColumn()
     multiSelectQuestion:MultiSelectQuestion;
 
-    @OneToOne(()=>SingleSelectQuestion)
+    @OneToOne(()=>SingleSelectQuestion,{eager:true})
     @JoinColumn()
     singleSelectQuestion:SingleSelectQuestion;
 
-    @OneToOne(()=> ScaleQuestion)
+    @OneToOne(()=> ScaleQuestion,{eager:true})
     @JoinColumn()
     scaleQuestion:ScaleQuestion
 

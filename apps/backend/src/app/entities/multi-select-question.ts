@@ -5,6 +5,6 @@ import { MultiSelectAnswer } from './multi-select-answer';
 export class MultiSelectQuestion {
   @PrimaryGeneratedColumn()
   public id: number;
-  @OneToMany(() => MultiSelectAnswer, (answers) => answers.multiSelectQuestion)
+  @OneToMany(() => MultiSelectAnswer, (answers) => answers.multiSelectQuestion,{eager:true})
   public answers: MultiSelectAnswer[];
 }

@@ -7,7 +7,7 @@ export class SingleSelectQuestion{
     @PrimaryGeneratedColumn()
     id:number;
 
-    @OneToMany(()=>SingleSelectAnswer,singleSelectAnswer=>singleSelectAnswer.question)
+    @OneToMany(()=>SingleSelectAnswer,singleSelectAnswer=>singleSelectAnswer.question,{eager:true})
     public answers:SingleSelectAnswer[];
 }
 
