@@ -32,6 +32,6 @@ export class Question {
     @JoinColumn()
     scaleQuestion:ScaleQuestion
 
-    @ManyToOne(()=>Inquiry,inquiry=>inquiry.questions,{onDelete:"CASCADE"})
+    @ManyToOne(()=>Inquiry,inquiry=>inquiry.questions,{onDelete:"CASCADE",cascade:true,onUpdate:'CASCADE'})
     inquiry:Inquiry;
 }
