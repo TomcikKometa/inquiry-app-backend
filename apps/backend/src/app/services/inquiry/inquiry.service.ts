@@ -29,17 +29,21 @@ export class InquiryService {
     return InquiryDtoMapper.map(inquiry);
   }
 
-  public async saveInquiry(request: CreateInquiryRequest): Promise<void> {
+  public async saveInquiry(request: CreateInquiryRequest): Promise<Question[]> {
     const inquiry = new Inquiry();
     inquiry.Name = request.name;
-    await this.questionService.saveQuestionList(await this.inquiryRepository.save(inquiry), request.questions);
+    return await this.questionService.saveQuestionList(inquiry,request.questions);
   }
 
   public async editInquiry(id: number, request: EditInquryRequest) {
     const inquiryToEdit: Inquiry | null = await this.inquiryRepository.findOneBy({ ID: id });
     if (inquiryToEdit) {
-      inquiryToEdit.Name = request.name;
-      this.inquiryRepository.save(inquiryToEdit);
+      if(request.name){
+        inquiryToEdit.Name = request.name;
+        //  await this.inquiryRepository.createQueryBuilder().update(inquiryToEdit).set({Name:request.name}).where('ID=:id',{id:request.id}).execute();
+      }
+      await this.questionService.deleteQuestionEntity(inquiryToEdit.questions);
+      return await this.questionService.saveQuestionList(inquiryToEdit,request.questions);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { QuestionType } from '../../entities/enums/question-type';
 import { Question } from '../../entities/question';
 import { MultiSelectQuestionDto } from '../inquiry/model/multi-select-question-dto';
@@ -29,12 +29,11 @@ export class QuestionService {
     private readonly multiSelectAnswerService: MultiSelectAnswerService
   ) {}
 
-  public async saveQuestionList(inquiry:Inquiry, questionsDto:QuestionDto[]): Promise<Question[]> {
+  public async saveQuestionList(inquiry: Inquiry, questionsDto:QuestionDto[]): Promise<Question[]> {
     const questions: Promise<Question>[] = questionsDto.map(
       async (questionDto: QuestionDto) => {
         const question: Question = new Question();
         question.questionType = questionDto.type;
-        Logger.log(questionDto.type);
         question.label = questionDto.label;
         question.inquiry = inquiry;
 
@@ -71,5 +70,8 @@ export class QuestionService {
       }
     );
     return await this.questionRepository.save(await Promise.all(questions));
+  }
+  public async deleteQuestionEntity(questionEntity:Question[]): Promise<Question[]>{
+    return await this.questionRepository.remove(questionEntity);
   }
 }
