@@ -20,7 +20,7 @@ export class InquiryController {
 
   @Post('/save')
   public async saveInquiry(@Body() body: CreateInquiryRequest) {
-    await this.inquiryService.saveInquiry(body);
+    return await this.inquiryService.saveInquiry(body);
   }
 
   @Get(':id')
@@ -31,8 +31,8 @@ export class InquiryController {
   }
 
   @Patch('/edit/:id')
-  public editInquiry(@Param('id')id:number,@Req() request: Request<EditInquryRequest>){
-    this.inquiryService.editInquiry(id,request.body)
+  public editInquiry(@Param('id')id:number,@Req() request: Request<EditInquryRequest>) {
+    return this.inquiryService.editInquiry(id,request.body)
   }
 
   @Delete('/delete/:id')
