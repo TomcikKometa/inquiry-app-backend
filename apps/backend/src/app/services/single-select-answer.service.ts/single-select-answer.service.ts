@@ -14,10 +14,7 @@ export class SingleSelectAnswerService {
 
   public save(questionDto: SingleSelectQuestionDto): Promise<SingleSelectAnswer[]> {
     return this.singleSelectAnswerRepository.save(
-      (questionDto as SingleSelectQuestionDto).answers.map(
-        (answerDto: SingleSelectAnswerDto) =>
-          new SingleSelectAnswer(answerDto.answer)
-      )
+      (questionDto as SingleSelectQuestionDto).answers.map((answerDto: SingleSelectAnswerDto) => new SingleSelectAnswer(answerDto.answer))
     );
   }
 }

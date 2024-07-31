@@ -11,9 +11,7 @@ export class MultiSelectQuestionService {
     private readonly multiSelectQuestionRepository: Repository<MultiSelectQuestion>
   ) {}
 
-  public saveWithAnswers(
-    answers: MultiSelectAnswer[]
-  ): Promise<MultiSelectQuestion> {
+  public saveWithAnswers(answers: MultiSelectAnswer[]): Promise<MultiSelectQuestion> {
     const multiSelectQuestion: MultiSelectQuestion = new MultiSelectQuestion();
     multiSelectQuestion.answers = answers;
     return this.multiSelectQuestionRepository.save(multiSelectQuestion);
