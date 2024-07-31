@@ -40,9 +40,8 @@ export class InquiryService {
     if (inquiryToEdit) {
       if(request.name){
         inquiryToEdit.Name = request.name;
-        //  await this.inquiryRepository.createQueryBuilder().update(inquiryToEdit).set({Name:request.name}).where('ID=:id',{id:request.id}).execute();
       }
-      await this.questionService.deleteQuestionEntity(inquiryToEdit.questions);
+      inquiryToEdit.questions = [];
       return await this.questionService.saveQuestionList(inquiryToEdit,request.questions);
     }
   }
