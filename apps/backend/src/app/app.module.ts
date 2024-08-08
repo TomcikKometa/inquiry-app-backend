@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { InquiryModule } from './inquiry-module/inquiry.module';
+import { PollsterInquiryModule } from './modules/pollster/pollster-inquiry.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { InquiryModule } from './inquiry-module/inquiry.module';
       synchronize: true,
       database: 'db_inquiry',
     }),
-    InquiryModule,
+    PollsterInquiryModule,
   ]
 })
 export class AppModule {}
