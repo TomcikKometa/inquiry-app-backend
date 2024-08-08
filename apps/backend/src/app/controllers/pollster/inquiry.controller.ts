@@ -1,14 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
-
-import { InquiryService } from '../services/inquiry/inquiry.service';
-import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
-import { CreateInquiryRequest } from './@models/requests/create-inquiry-requests';
 import { Request } from 'express';
+import { InquiryService } from '../../modules/pollster/services/inquiry/inquiry.service';
+import { InquiryDto } from '../../modules/pollster/services/inquiry/model/inquiry-dto';
+import { CreateInquiryRequest } from './@models/requests/create-inquiry-requests';
 import { EditInquryRequest } from './@models/requests/edit-inquiry-request';
-import { InquiryDto } from '../services/inquiry/model/inquiry-dto';
+import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
 import { GetOneInquiryResponse } from './@models/responses/get-one-inqiry-response';
 
-@Controller('/inquiry')
+@Controller('/pollster/inquiry')
 export class InquiryController {
   constructor(private readonly inquiryService: InquiryService) {}
 
