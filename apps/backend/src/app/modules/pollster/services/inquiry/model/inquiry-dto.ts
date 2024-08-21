@@ -1,7 +1,13 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { QuestionDto } from "./question-dto";
 
-export interface InquiryDto {
+export class InquiryDto {
+    @ApiProperty()
     id:number;
+
+    @ApiProperty()
     name:string;
+
+    @ApiProperty({type:[QuestionDto]})
     questions: QuestionDto[]
 }
