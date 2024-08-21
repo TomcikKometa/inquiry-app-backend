@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollsterInquiryModule } from './modules/pollster/pollster-inquiry.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PollsterInquiryModule } from './modules/pollster/pollster-inquiry.modul
       database: 'db_inquiry',
     }),
     PollsterInquiryModule,
+    UserModule
   ]
 })
 export class AppModule {}

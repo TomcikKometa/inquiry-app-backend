@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { UserType } from './enums/user-type';
 
 @Entity()
 export class User {
@@ -22,5 +21,5 @@ export class User {
   public emial: string;
 
   @Column()
-  public userType: UserType;
+  public userType: number;
 }
