@@ -1,5 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { InquiryDto } from '../../../../modules/pollster/services/inquiry/model/inquiry-dto';
 
-export interface GetOneInquiryResponse {
+export class GetOneInquiryResponse {
+  @ApiProperty()
   inquiry: InquiryDto;
 }

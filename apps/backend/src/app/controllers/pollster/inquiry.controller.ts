@@ -6,11 +6,14 @@ import { CreateInquiryRequest } from './@models/requests/create-inquiry-requests
 import { EditInquryRequest } from './@models/requests/edit-inquiry-request';
 import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
 import { GetOneInquiryResponse } from './@models/responses/get-one-inqiry-response';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('pollster-inquiry')
 @Controller('/pollster/inquiry')
 export class InquiryController {
   constructor(private readonly inquiryService: InquiryService) {}
 
+  @ApiResponse({type:GetAllInquiryResponse})
   @Get('/all')
   public async getAll(): Promise<GetAllInquiryResponse> {
     const inquiryList: InquiryDto[] = await this.inquiryService.getAll();

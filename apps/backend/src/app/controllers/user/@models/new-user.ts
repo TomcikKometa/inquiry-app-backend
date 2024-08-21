@@ -1,17 +1,22 @@
-import { IsNotEmpty } from "class-validator";
-
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class NewUserRequest {
-
- @IsNotEmpty()
+  @ApiProperty()
+  @IsNotEmpty()
   public userName: string;
-
+  
+  @ApiProperty()
   @IsNotEmpty()
   public password: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   public email: string;
 
-  public firstName?:string;
-  public lastName?:string;
+  @ApiPropertyOptional()
+  public firstName?: string;
+
+  @ApiPropertyOptional()
+  public lastName?: string;
 }
