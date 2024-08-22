@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollsterInquiryModule } from './modules/pollster/pollster-inquiry.module';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { UserModule } from './modules/user/user.module';
       database: 'db_inquiry',
     }),
     PollsterInquiryModule,
-    UserModule
+    UserModule,
+    AuthModule
   ]
 })
 export class AppModule {}
