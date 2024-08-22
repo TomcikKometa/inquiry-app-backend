@@ -6,7 +6,9 @@ import { User } from '../../entities/user';
 import { HashingService } from '../shared/services/hashing.service';
 
 @Module({
-    controllers: [UserController], 
-    providers: [UserService,HashingService], 
-    imports: [TypeOrmModule.forFeature([User])] })
+  controllers: [UserController],
+  providers: [UserService, HashingService],
+  imports: [TypeOrmModule.forFeature([User])],
+  exports: [UserService]
+})
 export class UserModule {}
