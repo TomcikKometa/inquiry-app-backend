@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { HashingService } from './services/hashing.service';
 
-@Module({})
+@Module({
+    exports: [HashingService],
+    providers: [ HashingService]})
 export class SharedModule {}
