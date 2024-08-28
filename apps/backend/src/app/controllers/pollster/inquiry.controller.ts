@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { InquiryService } from '../../modules/pollster/services/inquiry/inquiry.service';
 import { InquiryDto } from '../../modules/pollster/services/inquiry/model/inquiry-dto';
@@ -6,14 +6,17 @@ import { CreateInquiryRequest } from './@models/requests/create-inquiry-requests
 import { EditInquryRequest } from './@models/requests/edit-inquiry-request';
 import { GetAllInquiryResponse } from './@models/responses/get-all-inqury-response';
 import { GetOneInquiryResponse } from './@models/responses/get-one-inqiry-response';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../../guard/auth.guard';
 
 @ApiTags('pollster-inquiry')
 @Controller('/pollster/inquiry')
 export class InquiryController {
   constructor(private readonly inquiryService: InquiryService) {}
 
+  @ApiBearerAuth('JWT-auth')
   @ApiResponse({type:GetAllInquiryResponse})
+  @UseGuards(AuthGuard)
   @Get('/all')
   public async getAll(): Promise<GetAllInquiryResponse> {
     const inquiryList: InquiryDto[] = await this.inquiryService.getAll();
