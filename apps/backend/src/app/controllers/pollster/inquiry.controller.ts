@@ -23,11 +23,15 @@ export class InquiryController {
     return { inquiryList };
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @Post('/save')
   public async saveInquiry(@Body() body: CreateInquiryRequest) {
     return await this.inquiryService.saveInquiry(body);
   }
-
+  
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @Get(':id')
   public async getById(@Param('id') id: number): Promise<GetOneInquiryResponse> {
     return {
@@ -35,11 +39,15 @@ export class InquiryController {
     }
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @Patch('/edit/:id')
   public editInquiry(@Param('id')id:number,@Req() request: Request<EditInquryRequest>) {
     return this.inquiryService.editInquiry(id,request.body)
   }
 
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
   @Delete('/delete/:id')
    public async deleteInquiry(@Param('id')id: number): Promise<void>{
      await this.inquiryService.deleteInquiryRequest(id);
