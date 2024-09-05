@@ -1,8 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Header, Headers, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginRequest } from './model/login-request';
 import { AuthService } from '../../modules/auth/services/auth.service';
 import { LoginResponse } from './model/login-response';
+import { RefreshTokenResponse } from './model/refresh-token-response';
+import { AuthGuard } from '../../guard/auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -13,5 +15,13 @@ export class AuthController {
   @Post('/login')
   public async loginUser(@Body() body: LoginRequest): Promise<LoginResponse> {
     return { token: await this.authService.login(body.username, body.password) };
+  }
+
+  @ApiResponse({type:RefreshTokenResponse})
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(AuthGuard)
+  @Get('/refresh')
+  public async refreshToken(@Headers('Authorization') authHeader:string):Promise<string>{
+    return 
   }
 }
