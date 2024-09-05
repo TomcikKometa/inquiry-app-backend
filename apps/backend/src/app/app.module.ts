@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PollsterInquiryModule } from './modules/pollster/pollster-inquiry.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,7 +20,12 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     PollsterInquiryModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    JwtModule.register({
+      global:true,
+      secret:'&&&&****9900',
+      signOptions:{expiresIn:'120s'},
+    })
   ]
 })
 export class AppModule {}
