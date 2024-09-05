@@ -3,10 +3,9 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class HashingService {
-  public salt = '$2b$10$PGCPBrbBYsOxi.Sc/vklHO';
 
   public hash(value: string): Promise<string> {
-    return bcrypt.hash(value, this.salt);
+    return bcrypt.hash(value, 10);
   }
 
   public verifyUserPassord(encryptedPassword: string, userRequestPssword: string): Promise<boolean> {
