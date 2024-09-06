@@ -21,7 +21,7 @@ export class AuthController {
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Get('/refresh')
-  public async refreshToken(@Headers('Tomek') authHeader:string):Promise<string>{
+  public async refreshToken(@Headers('Authorization') authHeader:string):Promise<string>{
     return this.authService.refreshToken(authHeader)
   }
 }
