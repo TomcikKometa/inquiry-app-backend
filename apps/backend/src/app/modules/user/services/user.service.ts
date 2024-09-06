@@ -14,7 +14,7 @@ export class UserService {
 
   public async createUser(user: NewUserRequest): Promise<void> {
     const newUser: User = new User();
-    newUser.emial = user.email;
+    newUser.email = user.email;
     newUser.firstName = user.firstName;
     newUser.lastName = user.lastName;
     newUser.password = await this.hashingService.hash(user.password);
@@ -30,7 +30,7 @@ export class UserService {
 
   public async editUserEmial(id:number,userEmail:string):Promise<void>{
     const userInfo: User = await this.userRepository.findOneBy({ id });
-    userInfo.emial = userEmail;
+    userInfo.email = userEmail;
     this.userRepository.save(userInfo);
   }
 

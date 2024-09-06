@@ -1,10 +1,11 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../../entities/user';
 import { HashingService } from '../../shared/services/hashing.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../../shared/models/token-payload';
+import { JWTdecoded } from '../models/jwt-decoded';
 
 @Injectable()
 export class AuthService {
@@ -25,13 +26,15 @@ export class AuthService {
     } else throw new UnauthorizedException();
   }
 
-  private generateJWToken(user: User): Promise<string> {
-    return this.jwtService.signAsync({id:user.id,email:user.emial} as TokenPayload)
+  private generateJWToken(user: User | JWTdecoded): Promise<string> {
+    return this.jwtService.signAsync({id:user.id,email:user.email} as (TokenPayload | JWTdecoded))
   }
 
 
   public refreshToken(header:string){
-    Logger.log('header',header)
-    return 'token'
+    const [type, token] = header?.split(' ') ?? [];
+    type === 'Bearer' ? token : undefined;
+    const jwtDecoded: JWTdecoded = this.jwtService.decode(token);
+    return this.generateJWToken(jwtDecoded);
   }
 }
