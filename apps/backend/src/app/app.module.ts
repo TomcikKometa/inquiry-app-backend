@@ -5,6 +5,7 @@ import { PollsterInquiryModule } from './modules/pollster/pollster-inquiry.modul
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { jwtConstant } from './guard/jwt-constant';
 
 @Module({
   imports: [
@@ -23,8 +24,8 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     JwtModule.register({
       global:true,
-      secret:'&&&&****9900',
-      signOptions:{expiresIn:'120s'},
+      secret:jwtConstant.secret,
+      signOptions:{expiresIn:'240s'},
     })
   ]
 })
