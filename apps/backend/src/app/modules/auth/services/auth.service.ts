@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../../entities/user';
@@ -30,5 +30,8 @@ export class AuthService {
   }
 
 
-  // public refreshToken(header:string)
+  public refreshToken(header:string){
+    Logger.log('header',header)
+    return 'token'
+  }
 }
