@@ -18,7 +18,7 @@ export class User {
   public lastName: string;
 
   @Column({nullable:false})
-  public emial: string;
+  public email: string;
 
   @Column()
   public userType: number;
