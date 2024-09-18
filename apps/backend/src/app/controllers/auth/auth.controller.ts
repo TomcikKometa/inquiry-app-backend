@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginRequest } from './model/login-request';
 import { AuthService } from '../../modules/auth/services/auth.service';
@@ -14,7 +14,7 @@ export class AuthController {
   @ApiResponse({type:LoginResponse})
   @Post('/login')
   public async loginUser(@Body() body: LoginRequest): Promise<LoginResponse> {
-    return { access_token: await this.authService.login(body.username, body.password) };
+    return { access_token: (await this.authService.login(body.username, body.password)).access_token,id: (await this.authService.login(body.username, body.password)).id};
   }
 
   @ApiResponse({type:RefreshTokenResponse})
