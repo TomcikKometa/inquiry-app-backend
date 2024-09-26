@@ -18,7 +18,6 @@ export class AuthController {
       access_token: (await this.authService.login(body.username, body.password)).access_token,
       userId: (await this.authService.login(body.username, body.password)).userId
     };
-    return { access_token: (await this.authService.login(body.username, body.password)).access_token,id: (await this.authService.login(body.username, body.password)).id};
 
   }
 
