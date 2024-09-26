@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginRequest } from './model/login-request';
 import { AuthService } from '../../modules/auth/services/auth.service';
@@ -11,17 +11,20 @@ import { AuthGuard } from '../../guard/auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiResponse({type:LoginResponse})
+  @ApiResponse({ type: LoginResponse })
   @Post('/login')
   public async loginUser(@Body() body: LoginRequest): Promise<LoginResponse> {
-    return { access_token: await this.authService.login(body.username, body.password) };
+    return {
+      access_token: (await this.authService.login(body.username, body.password)).access_token,
+      userId: (await this.authService.login(body.username, body.password)).userId
+    };
   }
 
-  @ApiResponse({type:RefreshTokenResponse})
+  @ApiResponse({ type: RefreshTokenResponse })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Get('/refresh')
-  public async refreshToken(@Headers('Authorization') authHeader:string):Promise<string>{
-    return this.authService.refreshToken(authHeader)
+  public async refreshToken(@Headers('Authorization') authHeader: string): Promise<string> {
+    return this.authService.refreshToken(authHeader);
   }
 }
