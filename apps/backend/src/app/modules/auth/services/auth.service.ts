@@ -6,12 +6,13 @@ import { HashingService } from '../../shared/services/hashing.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../../shared/models/token-payload';
 import { JWTdecoded } from '../models/jwt-decoded';
+import { TokenResponseObject } from '../models/token-object';
 
 @Injectable()
 export class AuthService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>, private readonly hashingService: HashingService,private readonly jwtService:JwtService) {}
 
-  public async login(userName: string, requestPassword: string): Promise<string> {
+  public async login(userName: string, requestPassword: string): Promise<TokenResponseObject> {
     if (userName === '' && requestPassword === '') {
       throw new UnauthorizedException();
     }
@@ -22,7 +23,7 @@ export class AuthService {
     }
 
     if (await this.hashingService.verifyUserPassord(user.password, requestPassword)) {
-      return this.generateJWToken(user)
+      return {access_token: await this.generateJWToken(user), id:user.id}
     } else throw new UnauthorizedException();
   }
 

@@ -5,4 +5,5 @@ export class LoginResponse {
   access_token: string;
   @ApiProperty()
   userId: number;
+
 }
