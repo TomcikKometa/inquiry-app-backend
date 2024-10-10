@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { InquiryService } from '../../modules/pollster/services/inquiry/inquiry.service';
 import { InquiryDto } from '../../modules/pollster/services/inquiry/model/inquiry-dto';
@@ -27,6 +27,7 @@ export class InquiryController {
   @UseGuards(AuthGuard)
   @Post('/save')
   public async saveInquiry(@Body() body: CreateInquiryRequest) {
+    Logger.log(body)
     return await this.inquiryService.saveInquiry(body);
   }
   

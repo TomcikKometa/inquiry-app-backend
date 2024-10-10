@@ -9,6 +9,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/create')
+
   @HttpCode(HttpStatus.CREATED)
   public async createUser(@Body() body: NewUserRequest) {
     return await this.userService.createUser(body);
