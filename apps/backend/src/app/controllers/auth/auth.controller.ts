@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Header, Headers, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginRequest } from './model/login-request';
 import { AuthService } from '../../modules/auth/services/auth.service';
@@ -12,13 +12,11 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiResponse({ type: LoginResponse })
+  @HttpCode(HttpStatus.ACCEPTED)
+  @Header('x-pagination','1')
   @Post('/login')
   public async loginUser(@Body() body: LoginRequest): Promise<LoginResponse> {
-    return {
-      access_token: (await this.authService.login(body.username, body.password)).access_token,
-      userId: (await this.authService.login(body.username, body.password)).userId
-    };
-
+    return await this.authService.login(body.username, body.password);
   }
 
   @ApiResponse({ type: RefreshTokenResponse })
